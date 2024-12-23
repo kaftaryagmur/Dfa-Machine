@@ -1,10 +1,14 @@
 from collections import defaultdict
+from typing import Set
+
 
 def minimize(dfa):
     print("\nDurum indirgeme işlemi başlatıldı...")
+    states: Set[str] = dfa.states
+    accept_states: Set[str] = dfa.accept_states
 
-    non_accepting = dfa.states - dfa.accept_states
-    partitions = [dfa.accept_states, non_accepting]
+    non_accepting = states - accept_states
+    partitions = [accept_states, non_accepting]
 
     new_partitions = []
 
@@ -28,7 +32,7 @@ def minimize(dfa):
     minimized_accept_states = {
         ",".join(sorted(partition))
         for partition in partitions
-        if any(state in dfa.accept_states for state in partition)
+        if any(state in accept_states for state in partition)
     }
 
     minimized_transition_function = {}
@@ -39,9 +43,11 @@ def minimize(dfa):
             if next_state:
                 for new_partition in partitions:
                     if next_state in new_partition:
-                        minimized_transition_function[
-                            (",".join(sorted(partition)), symbol)
-                        ] = ",".join(sorted(new_partition))
+                        partition_key: str = ",".join(sorted(partition))
+                        new_partition_key: str = ",".join(sorted(new_partition))
+                        transition_key: tuple[str, str] = (partition_key, symbol)
+
+                        minimized_transition_function[transition_key] = new_partition_key
                         break
 
     print("\n--- İndirgenmiş DFA ---")

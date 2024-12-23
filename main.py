@@ -1,5 +1,5 @@
 from dfa.core import DFA
-from dfa.utils import get_user_input
+from dfa.utils import get_user_input, visualize_dfa, edit_dfa   # visualize_dfa işlevi eklendi
 from dfa.minimize import minimize
 
 def main():
@@ -12,7 +12,9 @@ def main():
         print("2) Durum indirgeme")
         print("3) DFA geçiş tablosunu göster")
         print("4) Yeni DFA tanımla")
-        print("5) Çıkış")
+        print("5) DFA'yı Çiz")
+        print("6) DFA'yı Düzenle")
+        print("7) Çıkış")
 
         choice = input("Seçiminizi yapın: ")
 
@@ -30,6 +32,17 @@ def main():
             states, alphabet, transition_function, start_state, accept_states = get_user_input()
             dfa = DFA(states, alphabet, transition_function, start_state, accept_states)
         elif choice == '5':
+            visualize_dfa(
+                states=dfa.states,
+                alphabet=dfa.alphabet,
+                transition_function=dfa.transition_function,
+                start_state=dfa.start_state,
+                accept_states=dfa.accept_states,
+                filename="dfa_graph"
+            )
+        elif choice == '6':
+            edit_dfa(dfa)
+        elif choice == '7':
             print("Program sonlandırılıyor...")
             break
         else:
